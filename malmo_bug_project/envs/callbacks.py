@@ -26,10 +26,7 @@ class BugDetectionCallback(BaseCallback):
         self.rollout_bugs = 0 # 초기화
 
 class UniqueBugCallback(BaseCallback):
-    """
-    발견한 버그의 '종류'가 몇 개인지 기록합니다 (최대 7개).
-    - custom/unique_bugs_count: 현재까지 찾은 버그 종류 수
-    """
+
     def __init__(self, verbose=1):
         super().__init__(verbose)
         self.found_bug_ids = set()
