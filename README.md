@@ -2,9 +2,33 @@
 
 The Malmo platform is used: https://github.com/microsoft/malmo
 
-우분투 버전: 20.04.6 LTS
+## Environment Setup
 
-1. Malmo링크를 통해 들어가서 마인크래프트 환경을 세팅 (20.* 버전으로 세팅할것을 권장 / 22.*부터 에러발생)
-2. 생선된 MalmoPlatform안에 해당 malmo_bug_project파일 넣기
-3. malmo_bug_project 이동
-4. python3 agent/train_(RELINE, BEAGT, CAE) 실행
+**OS:** Ubuntu 20.04.6 LTS
+
+### 1. Setup Minecraft Environment
+Follow the instructions at the [Malmo Link] to set up the environment.
+> [!IMPORTANT]  
+> It is highly recommended to use version 20.*  
+> *Note: Errors have been reported starting from version 22.*
+
+### 2. Project Installation
+1. Move the `malmo_bug_project` folder into the generated `MalmoPlatform` directory.
+2. Navigate to the project directory:
+   ```bash
+   cd MalmoPlatform/malmo_bug_project
+
+### 3. Running the Agent
+Once the environment is set up, you can start training the agent by selecting one of the available algorithms.
+
+- To train using RELINE
+  ```bash
+  python3 agent/train_RELINE.py
+
+- To train using BEAGT
+  ```bash
+  python3 agent/train_BEAGT.py
+
+- To train using CAE
+  ```bash
+  python3 agent/train_CAE.py
