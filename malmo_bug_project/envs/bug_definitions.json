@@ -1,0 +1,74 @@
+{
+  "bugs": [
+    {
+      "id": "BUG_REVERSE_TURN",
+      "description": "Control Error: Turning right on Obsidian results in turning left.",
+      "trigger": { "action": ["turn 1"], "condition": "On Obsidian" },
+      "effect": { "message": "Input Reversed", "type": "input_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_TELEPORT_TRAP",
+      "description": "Logic Error: Stepping on Redstone Block resets position.",
+      "trigger": { "action": ["move"], "condition": "On Redstone" },
+      "effect": { "message": "Position Reset", "type": "logic_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_DEAD_ZONE",
+      "description": "Map Error: Commands ignored on Gold Block.",
+      "trigger": { "action": ["move 1"], "condition": "On Gold Block" },
+      "effect": { "message": "Dead Zone", "type": "connection_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_SUPER_JUMP",
+      "description": "Physics Glitch: Jumping on Sandstone causes abnormal height.",
+      "trigger": { "action": ["jump 1"], "condition": "On Sandstone" },
+      "effect": { "message": "Super Jump", "type": "physics_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_SEQUENCE_ERROR",
+      "description": "Input Error: Jump command fails after turning on Clay.",
+      "trigger": { "sequence": ["turn", "jump"], "condition": "On Clay" },
+      "effect": { "message": "Combo Failed", "type": "input_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_INTERACT_FAIL",
+      "description": "Interaction Error: Cannot use items on Lapis Block.",
+      "trigger": { "action": ["use 1"], "condition": "On Lapis" },
+      "effect": { "message": "Interact Failed", "type": "logic_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_TRANSMUTATION",
+      "description": "Logic Error: Using 'Web' block transmutes it.",
+      "trigger": { "action": ["use 1"], "condition": "Target: Web" },
+      "effect": { "message": "Transmutation", "type": "logic_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_SKY_FREEZE",
+      "description": "Control Error: Moving while looking up on Quartz freezes player.",
+      "trigger": { "action": ["move"], "condition": "On Quartz & Pitch < -70" },
+      "effect": { "message": "Movement Frozen", "type": "control_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_HOTBAR_ERROR",
+      "description": "Interface Error: Cannot switch slots on Emerald Block.",
+      "trigger": { "action": ["hotbar"], "condition": "On Emerald" },
+      "effect": { "message": "Slot Reset", "type": "gui_error" },
+      "reward": 100
+    },
+    {
+      "id": "BUG_BREAK_CRASH",
+      "description": "Crash Error: Attacking Glass causes block crash.",
+      "trigger": { "action": ["attack"], "condition": "Target: Glass" },
+      "effect": { "message": "Block Vanished", "type": "crash_error" },
+      "reward": 100
+    }
+  ]
+}
