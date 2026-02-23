@@ -21,7 +21,6 @@ from envs.callbacks import (
     TrajectoryLogger
 )
 
-# [설정]
 MALMO_PORT = 10008       
 TOTAL_RUNS = 10
 STEPS_PER_RUN = 100_000
