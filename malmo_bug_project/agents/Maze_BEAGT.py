@@ -16,7 +16,7 @@ except ImportError:
 # [setting]
 # ==============================================================================
 CONFIG = {
-    "run_name": "run_reward_based",
+    "run_name": "Maze_BEAGT",
     "port": 10008,               # port
     "total_steps": 100000,       # step
     "start_after": 100000,        # 
@@ -38,7 +38,6 @@ class RewardBasedBEAGTCallback(BaseCallback):
         self.original_schedule = None
 
     def _on_training_start(self) -> None:
-        # 동적 Epsilon 스케줄링 설정
         self.original_schedule = self.model.exploration_schedule
         def dynamic_schedule(current_progress):
             return self.cfg["boost_eps"] if self.is_boosting else self.original_schedule(current_progress)
@@ -86,15 +85,12 @@ class DataLogger(BaseCallback):
         self.log_path = f"{run_name}.csv"
         
     def _on_step(self):
-        # 모델에서 상태 플래그 가져오기
         is_boosting = 1 if getattr(self.model, 'is_boosting', False) else 0
         
-        # 정보 추출
         infos = self.locals.get('infos', [{}])[0]
         visited_count = infos.get('visited_count', 0)
         current_eps = self.model.exploration_rate
 
-        # 데이터 저장
         self.data.append({
             "step": self.num_timesteps,
             "visited_count": visited_count,
