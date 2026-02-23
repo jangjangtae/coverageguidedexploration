@@ -18,7 +18,22 @@ Follow the instructions at the [Malmo Link] to set up the environment.
    ```bash
    cd MalmoPlatform/malmo_bug_project
 
-### 3. Running the Agent
+### 3. Running the Agent(Maze)
+Once the environment is set up, you can start training the agent by selecting one of the available algorithms.
+
+- To train using RELINE
+  ```bash
+  python3 agent/run_RL.py
+
+- To train using BEAGT
+  ```bash
+  python3 agent/Maze_BEAGT.py
+
+- To train using CAE
+  ```bash
+  python3 agent/Maze_CAE.py
+
+### 4. Running the Agent(Bug_malmo)
 Once the environment is set up, you can start training the agent by selecting one of the available algorithms.
 
 - To train using RELINE
