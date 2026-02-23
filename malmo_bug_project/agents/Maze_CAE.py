@@ -12,9 +12,6 @@ import MalmoPython
 import json
 import random
 
-# ==============================================================================
-# 0. [환경] Procedural Safe Maze (기존 유지)
-# ==============================================================================
 class SimpleVoxelEnv(gym.Env):
     def __init__(self, port=10006, map_seed=None):
         super().__init__()
@@ -202,16 +199,13 @@ class SimpleVoxelEnv(gym.Env):
     
     def close(self): pass
 
-# ==============================================================================
-# 1. [핵심] Momentum Spatial BEAGT (관성 기반 부스팅)
-# ==============================================================================
 class MomentumSpatialCallback(BaseCallback):
     def __init__(self, check_every=500, min_eps=0.10, bump_to=0.90, 
-                 start_after=10000,       # 초반 탐색 후 가동
+                 start_after=10000,       
                  displacement_threshold=5.0,
-                 base_boost_steps=3000,   # 갇혔을 때 최초 부스팅 시간
-                 momentum_bonus=2000,     # 길 찾으면 추가 연장 시간 (관성)
-                 max_accumulated_boost=10000, # 너무 오래 켜지는 것 방지
+                 base_boost_steps=3000,   
+                 momentum_bonus=2000,     
+                 max_accumulated_boost=10000, 
                  verbose=0):
         super().__init__(verbose)
         self.check_every = check_every
@@ -236,7 +230,6 @@ class MomentumSpatialCallback(BaseCallback):
     def _on_training_start(self) -> None:
         self.original_schedule = self.model.exploration_schedule
         def dynamic_schedule(current_progress):
-            # 부스팅 시간이 아직 안 끝났으면 강제 0.9 (Epsilon)
             if self.num_timesteps < self.boost_end_step:
                 self.is_boosting = True
                 return self.bump_to
@@ -250,34 +243,27 @@ class MomentumSpatialCallback(BaseCallback):
         current_visited_count = infos.get('visited_count', 0)
         x, z = infos.get('XPos', 0), infos.get('ZPos', 0)
         
-        # Validator 로깅용 플래그 (1=Boost, 0=Normal)
         self.model.beagt_is_boosting = 1 if self.is_boosting else 0
         base_eps = self.original_schedule(self.model._current_progress_remaining)
 
-        # [0] 리셋 감지 (에피소드 변경)
         if current_visited_count < self.last_visited_count:
             if self.is_boosting and self.verbose > 0:
                  print(f"🔄 [Reset] New Episode. Stopping Boost.")
             self.is_boosting = False
-            self.boost_end_step = 0 # 부스팅 즉시 종료
+            self.boost_end_step = 0 
             self.last_visited_count = current_visited_count
             self.last_check = self.num_timesteps
             self.last_pos = np.array([x, z])
             return True
 
-        # [1] 핵심: 관성(Momentum) 로직
-        # 부스팅 중에 '새로운 곳'을 발견했는가?
         if self.is_boosting and (current_visited_count > self.last_visited_count):
-            # 현재 남은 시간 계산
             remaining = self.boost_end_step - self.num_timesteps
             
-            # 너무 오래 켜져있지 않다면 시간 연장!
             if remaining < self.max_accumulated_boost:
                 self.boost_end_step += self.momentum_bonus
                 if self.verbose > 0:
                     print(f"🔥 [Momentum] New cell found! Boost EXTENDED by {self.momentum_bonus} steps! (Ends at {self.boost_end_step})")
 
-        # [2] 정체 감지 (부스팅이 꺼져있을 때만 체크)
         if not self.is_boosting and self.num_timesteps > self.start_after:
             if self.num_timesteps > self.last_check + self.check_every:
                 delta = current_visited_count - self.last_visited_count
@@ -285,13 +271,11 @@ class MomentumSpatialCallback(BaseCallback):
                 dist = 0.0
                 if self.last_pos is not None:
                     dist = np.linalg.norm(current_pos - self.last_pos)
-                
-                # 업데이트
+
                 self.last_visited_count = current_visited_count
                 self.last_pos = current_pos
                 self.last_check = self.num_timesteps
-                
-                # 정체 판단: 발견 0개 + 움직임 적음 + 입실론 낮음
+
                 if delta <= 0 and dist < self.displacement_threshold and base_eps < self.min_eps:
                     self.is_boosting = True
                     self.boost_end_step = self.num_timesteps + self.base_boost_steps
@@ -299,16 +283,12 @@ class MomentumSpatialCallback(BaseCallback):
                     if self.verbose > 0:
                         print(f"🚀 [Stagnation] Stuck detected. Boosting START for {self.base_boost_steps} steps.")
 
-        # 평소 상태 업데이트 (부스팅 중이 아닐 때 놓친 방문 카운트 갱신용)
         if not self.is_boosting:
              self.last_visited_count = current_visited_count
              self.last_pos = np.array([x, z])
 
         return True
 
-# ==============================================================================
-# 2. [로거] Validator (데이터 저장용)
-# ==============================================================================
 class HypothesesValidator(BaseCallback):
     def __init__(self, run_name):
         super().__init__()
@@ -342,16 +322,11 @@ class HypothesesValidator(BaseCallback):
     def save_log(self):
         pd.DataFrame(self.data).to_csv(self.log_path, index=False)
 
-# ==============================================================================
-# 3. 메인 실행
-# ==============================================================================
 if __name__ == "__main__":
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_name = f"Maze_CAE_{timestamp}"
     
-    print(f"🚀 [실험 시작] {run_name} (Momentum Mode Applied)")
     
-    # 포트는 본인 환경에 맞게 수정하세요
     env = SimpleVoxelEnv(port=10006) 
 
     model = DQN(
@@ -364,14 +339,13 @@ if __name__ == "__main__":
         exploration_final_eps=0.05
     )
 
-    # [수정됨] MomentumSpatialCallback 적용
     beagt_callback = MomentumSpatialCallback(
-        check_every=500,        # 반응 속도 빠르게 (500 step)
-        start_after=10000,      # 초반 1만 스텝 후 바로 가동
+        check_every=500,        #
+        start_after=10000,      #
         displacement_threshold=5.0,
-        base_boost_steps=3000,  # 갇혔을 때 3000스텝 부스팅
-        momentum_bonus=2000,    # 🔥 관성 보너스: 길 찾으면 2000스텝 추가 연장
-        max_accumulated_boost=15000, # 최대 연장 한도
+        base_boost_steps=3000,  # 
+        momentum_bonus=2000,    # 
+        max_accumulated_boost=15000, # 
         verbose=1
     )
     
@@ -380,7 +354,7 @@ if __name__ == "__main__":
     try:
         model.learn(total_timesteps=100000, callback=[validator, beagt_callback])
     except KeyboardInterrupt:
-        print("중지됨.")
+        print("Stop.")
     finally:
         validator.save_log()
         env.close()
