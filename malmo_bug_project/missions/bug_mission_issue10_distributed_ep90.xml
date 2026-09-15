@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <About>
+    <Summary>Bug Detection Arena: Distributed Issue10 EP90</Summary>
+  </About>
+
+  <ServerSection>
+    <ServerInitialConditions>
+      <Time>
+        <StartTime>18000</StartTime>
+        <AllowPassageOfTime>false</AllowPassageOfTime>
+      </Time>
+      <Weather>clear</Weather>
+    </ServerInitialConditions>
+
+    <ServerHandlers>
+      <FlatWorldGenerator generatorString="3;7,2;1;"/>
+      <DrawingDecorator>
+        <!-- ===== Floor / outer shell ===== -->
+        <DrawCuboid x1="-2" y1="3" z1="-2" x2="21" y2="3" z2="21" type="bedrock"/>
+        <DrawCuboid x1="0" y1="4" z1="0" x2="19" y2="4" z2="19" type="bedrock"/>
+
+        <DrawCuboid x1="-1" y1="5" z1="-1" x2="20" y2="7" z2="-1" type="bedrock"/>
+        <DrawCuboid x1="-1" y1="5" z1="20" x2="20" y2="7" z2="20" type="bedrock"/>
+        <DrawCuboid x1="-1" y1="5" z1="-1" x2="-1" y2="7" z2="20" type="bedrock"/>
+        <DrawCuboid x1="20" y1="5" z1="-1" x2="20" y2="7" z2="20" type="bedrock"/>
+
+        <!-- ===== Four-room walls with 1-block gaps ===== -->
+        <!-- Vertical separator, door gaps at z=9 and z=15 -->
+        <DrawCuboid x1="9" y1="5" z1="0"  x2="9" y2="7" z2="8"  type="bedrock"/>
+        <DrawCuboid x1="9" y1="5" z1="10" x2="9" y2="7" z2="14" type="bedrock"/>
+        <DrawCuboid x1="9" y1="5" z1="16" x2="9" y2="7" z2="19" type="bedrock"/>
+
+        <!-- Horizontal separator, door gaps at x=4 and x=16 -->
+        <DrawCuboid x1="0"  y1="5" z1="9" x2="3"  y2="7" z2="9" type="bedrock"/>
+        <DrawCuboid x1="5"  y1="5" z1="9" x2="8"  y2="7" z2="9" type="bedrock"/>
+        <DrawCuboid x1="10" y1="5" z1="9" x2="15" y2="7" z2="9" type="bedrock"/>
+        <DrawCuboid x1="17" y1="5" z1="9" x2="19" y2="7" z2="9" type="bedrock"/>
+
+        <!-- Center block to prevent diagonal leakage -->
+        <DrawCuboid x1="9" y1="5" z1="9" x2="9" y2="7" z2="9" type="bedrock"/>
+
+        <!--
+          Spawn-safe design:
+          Agent starts at (2.5, 5.0, 2.5). No bug trigger is placed in the immediate spawn region.
+          The closest bug opportunities are moved toward the far corner of the start room or other rooms.
+        -->
+
+        <!-- Room 1 / far start-room corner: heading and sequence bugs -->
+        <DrawBlock  x="7" y="4" z="7" type="obsidian"/>
+        <DrawCuboid x1="5" y1="4" z1="7" x2="6" y2="4" z2="8" type="clay"/>
+
+        <!-- Room 2 / lower-left: view lock, world mutation, transition teleport -->
+        <DrawBlock  x="2" y="4" z="18" type="quartz_block"/>
+        <DrawBlock  x="5" y="5" z="15" type="web"/>
+        <DrawCuboid x1="7" y1="4" z1="15" x2="8" y2="4" z2="16" type="redstone_block"/>
+
+        <!-- Room 3 / upper-right: movement lock and collision impulse -->
+        <DrawCuboid x1="17" y1="4" z1="2" x2="18" y2="4" z2="3" type="gold_block"/>
+        <DrawCuboid x1="12" y1="4" z1="5" x2="13" y2="4" z2="5" type="sandstone"/>
+
+        <!-- Room 4 / lower-right: interaction, hotbar, break bugs -->
+        <DrawCuboid x1="17" y1="4" z1="17" x2="18" y2="4" z2="18" type="lapis_block"/>
+        <DrawCuboid x1="11" y1="4" z1="16" x2="12" y2="4" z2="17" type="emerald_block"/>
+        <DrawBlock x="18" y="5" z="11" type="glass"/>
+        <DrawBlock x="18" y="6" z="11" type="glass"/>
+
+        <!-- Visual guidance only -->
+        <DrawBlock x="4"  y="7" z="9"  type="glowstone"/>
+        <DrawBlock x="9"  y="7" z="15" type="glowstone"/>
+        <DrawBlock x="16" y="7" z="9"  type="glowstone"/>
+      </DrawingDecorator>
+
+      <ServerQuitFromTimeUp timeLimitMs="90000"/>
+    </ServerHandlers>
+  </ServerSection>
+
+  <AgentSection mode="Survival">
+    <Name>BugTester</Name>
+    <AgentStart>
+      <Placement x="2.5" y="5.0" z="2.5" yaw="0"/>
+      <Inventory>
+        <InventoryItem slot="0" type="stone" quantity="1"/>
+      </Inventory>
+    </AgentStart>
+
+    <AgentHandlers>
+      <ObservationFromFullStats/>
+      <ObservationFromFullInventory/>
+      <ObservationFromNearbyEntities>
+        <Range name="entities" xrange="10" yrange="2" zrange="10"/>
+      </ObservationFromNearbyEntities>
+      <ObservationFromGrid>
+        <Grid name="surrounding_blocks">
+          <min x="-2" y="-2" z="-2"/>
+          <max x="2"  y="2"  z="2"/>
+        </Grid>
+      </ObservationFromGrid>
+      <ObservationFromRay/>
+      <AbsoluteMovementCommands/>
+      <ContinuousMovementCommands/>
+      <InventoryCommands/>
+      <ChatCommands/>
+    </AgentHandlers>
+  </AgentSection>
+</Mission>

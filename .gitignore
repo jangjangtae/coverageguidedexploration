@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+malmo_bug_project/logs*/
+malmo_bug_project/runs*/
+malmo_bug_project/analysis_*/
+malmo_bug_project/checkpoints/
+malmo_bug_project/saved_models/
+malmo_bug_project/issue10_bug_smoke_logs/
+*.log

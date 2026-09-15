@@ -1,0 +1,64 @@
+{
+  "bugs": [
+    {
+      "id": "BUG_HEADING_DYNAMICS_ANOMALY",
+      "legacy_id": "BUG_REVERSE_TURN",
+      "description": "Control anomaly: rotation is misapplied or amplified under a specific traversal context.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_TRANSITION_TELEPORT",
+      "legacy_id": "BUG_TELEPORT_TRAP",
+      "description": "Transition anomaly: entering a designated traversal zone triggers an unintended position reset/teleport.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_MOVEMENT_LOCK_ZONE",
+      "legacy_id": "BUG_DEAD_ZONE",
+      "description": "Traversal anomaly: movement commands are suppressed in a specific zone.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_COLLISION_IMPULSE_GLITCH",
+      "legacy_id": "BUG_SUPER_JUMP",
+      "description": "Physics anomaly: collision or jump response produces an abnormal impulse.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_CONTEXTUAL_SEQUENCE_FAILURE",
+      "legacy_id": "BUG_SEQUENCE_ERROR",
+      "description": "Sequence anomaly: a valid action sequence fails only under a specific contextual condition.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_CONTEXTUAL_INTERACTION_OMISSION",
+      "legacy_id": "BUG_INTERACT_FAIL",
+      "description": "Interaction anomaly: an otherwise valid interaction fails to trigger its expected event in context.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_WORLD_STATE_MUTATION",
+      "legacy_id": "BUG_TRANSMUTATION",
+      "description": "World-state anomaly: a valid interaction causes an unintended block/object state mutation.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_VIEW_DEPENDENT_MOVEMENT_LOCK",
+      "legacy_id": "BUG_SKY_FREEZE",
+      "description": "Control anomaly: movement is suppressed only under a specific camera-angle and environmental condition.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_SLOT_SELECTION_DESYNC",
+      "legacy_id": "BUG_HOTBAR_ERROR",
+      "description": "Inventory anomaly: slot selection is unexpectedly overridden under a specific contextual condition.",
+      "reward": 100
+    },
+    {
+      "id": "BUG_BREAK_EVENT_CORRUPTION",
+      "legacy_id": "BUG_BREAK_CRASH",
+      "description": "Break-event anomaly: attacking a target causes unintended object-state corruption rather than a normal break result.",
+      "reward": 100
+    }
+  ]
+}
