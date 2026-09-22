@@ -16,6 +16,10 @@ In sparse-reward 3D environments, RL agents can become concentrated on a small s
 
 This work introduces **Coverage-Guided Adaptive Exploration (CAE)** and combines it with RND to encourage broader, more structured exploration.
 
+![RND+CAE conceptual overview](assets/rnd_cae_overview.webp)
+
+*Conceptual progression from conventional task-reward-driven testing to RND-based exploration and the proposed hybrid RND+CAE approach.*
+
 ## Method
 
 The agent is trained with a reward composed of the external task reward and intrinsic exploration signals:
@@ -25,23 +29,9 @@ The agent is trained with a reward composed of the external task reward and intr
 
 The combined intrinsic signal is integrated with the external reward before the DQN update.
 
-Conceptually:
+![RND+CAE architecture](assets/rnd_cae_architecture.webp)
 
-```text
-Observation
-   │
-   ├──> RND predictor / target ──> novelty reward
-   │
-   ├──> coverage tracker ────────> CAE reward
-   │
-   └──> environment reward
-                │
-                ▼
-        combined training reward
-                │
-                ▼
-               DQN
-```
+*System architecture used to combine DQN, RND novelty, CAE coverage guidance, and fault logging in Project Malmo.*
 
 ## Environments
 
@@ -56,6 +46,10 @@ Used to evaluate interaction-driven exploration and seeded-fault discovery.
 The Arena configuration includes structured observations such as position/orientation, voxel information, and inventory state, together with a larger discrete action space.
 
 ## Evaluation
+
+![Main RND+CAE experimental results](assets/rnd_cae_results.webp)
+
+*Training-time coverage and unique-fault discovery trends for the main comparison methods.*
 
 Experiments were conducted under the same training budget with repeated runs and multi-seed evaluation.
 
@@ -76,6 +70,10 @@ The evaluation also includes Maze coverage, repeated runs, ablation studies, and
 
 ```text
 coverageguidedexploration/
+|-- assets/
+|   |-- rnd_cae_overview.webp
+|   |-- rnd_cae_architecture.webp
+|   `-- rnd_cae_results.webp
 |-- malmo_bug_project/
 |   |-- agents/
 |   |   |-- train_maze_reexperiment.py
