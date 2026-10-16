@@ -18,7 +18,7 @@ This work introduces **Coverage-Guided Adaptive Exploration (CAE)** and combines
 
 ![RND+CAE conceptual overview](assets/rnd_cae_overview.webp)
 
-*Conceptual progression from conventional task-reward-driven testing to RND-based exploration and the proposed hybrid RND+CAE approach.*
+*How coverage-aware guidance extends conventional task-reward-driven testing and RND-based novelty exploration.*
 
 ## Method
 
@@ -38,10 +38,16 @@ The combined intrinsic signal is integrated with the external reward before the 
 The experiments use **Project Malmo / Minecraft** with two complementary settings.
 
 ### Randomized Maze
-Used to evaluate spatial exploration and cumulative coverage.
+
+![Randomized Maze environment used for spatial-coverage evaluation](assets/rnd_cae_maze.webp)
+
+The maze is used to evaluate spatial exploration and cumulative coverage over training.
 
 ### Partitioned Arena
-Used to evaluate interaction-driven exploration and seeded-fault discovery.
+
+![Partitioned Arena environment with representative interactive elements and fault targets](assets/rnd_cae_arena.webp)
+
+The arena is used to evaluate interaction-driven exploration and seeded-fault discovery.
 
 The Arena configuration includes structured observations such as position/orientation, voxel information, and inventory state, together with a larger discrete action space.
 
@@ -49,7 +55,7 @@ The Arena configuration includes structured observations such as position/orient
 
 ![Main RND+CAE experimental results](assets/rnd_cae_results.webp)
 
-*Training-time coverage and unique-fault discovery trends for the main comparison methods.*
+*Comparison across six methods: Maze cumulative coverage, Arena coverage and Arena unique-fault discovery over 100,000 training steps.*
 
 Experiments were conducted under the same training budget with repeated runs and multi-seed evaluation.
 
@@ -73,7 +79,9 @@ coverageguidedexploration/
 |-- assets/
 |   |-- rnd_cae_overview.webp
 |   |-- rnd_cae_architecture.webp
-|   `-- rnd_cae_results.webp
+|   |-- rnd_cae_results.webp
+|   |-- rnd_cae_maze.webp
+|   `-- rnd_cae_arena.webp
 |-- malmo_bug_project/
 |   |-- agents/
 |   |   |-- train_maze_reexperiment.py
@@ -232,7 +240,7 @@ tests use a dummy environment and do not launch Minecraft.
 **Tae-Hyeon Jang**, Hyeon-Uk Lee, Hyunseok Kim,  
 *Coverage-Aware Guidance for Novelty-Driven Exploration in Automated Game Testing under Sparse-Reward 3D Environments*,  
 IEEE Access, 2026.  
-**First Author**
+**First Author** · [DOI](https://doi.org/10.1109/ACCESS.2026.3730445) · [Notion research portfolio](https://app.notion.com/p/3eb8622d184b81be9b78d695d18c50cc)
 
 ## Research Scope
 
